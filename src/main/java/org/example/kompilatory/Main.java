@@ -14,6 +14,7 @@ public class Main {
         System.out.println(inputString);
         System.out.println("\n\n");
 
+
         CharStream input = CharStreams.fromString(inputString);
         // stwórz obiekt SQLLexer
         SQLLexer lexer = new SQLLexer(input);
