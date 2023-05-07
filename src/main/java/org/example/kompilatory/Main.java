@@ -33,5 +33,7 @@ public class Main {
 
         // przetwórz drzewo składniowe z użyciem ParseTreeWalker i MyListener
         walker.walk(listener, tree);
+
+        //Dodaje komentarz
     }
 }
