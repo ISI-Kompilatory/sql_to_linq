@@ -8,7 +8,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 public class Main {
     public static void main(String[] args) {
-        String inputString = "SELECT column1, column2, table1.col3 FROM table1";
+        String inputString = "SELECT column1, column2, table1.col3 FROM table1 WHERE column1 > 10 AND column1 < 20";
 
         System.out.println("Dla zapytania w SQL:");
         System.out.println(inputString);
