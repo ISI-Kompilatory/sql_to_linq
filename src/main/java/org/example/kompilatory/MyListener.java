@@ -5,12 +5,6 @@ import java.util.stream.Collectors;
 
 public class MyListener extends SQLParserBaseListener {
 
-
-/*    @Override
-    public void enterSql_stmt_list(SQLParser.Sql_stmt_listContext ctx) {
-        System.out.println("Enter select statement: " + ctx.getText());
-    }*/
-
     @Override
     public void exitSql_stmt_list(SQLParser.Sql_stmt_listContext ctx) {
         List<SQLParser.Select_stmtContext> selectList = ctx.select_stmt();
@@ -20,14 +14,17 @@ public class MyListener extends SQLParserBaseListener {
         //System.out.println("Exit select statement: " + ctx.getText());
     }
 
-
     private void processSelectCore(SQLParser.Select_coreContext selectCore) {
         String resultColumnsString = getResultColumnsString(selectCore);
         System.out.println(resultColumnsString);
 
-        System.out.println("Całe zapytanie:");
-        String full = "FROM " + "xxx" + " "
-                + "WHERE " + "xxx" + " "
+        String fromString = getFromString(selectCore);
+
+        String whereString = getWhereString(selectCore);
+
+        System.out.println("Całe zapytanie LINQ:");
+        String full = "FROM " + fromString + " \n"
+                + "WHERE " + whereString + " \n"
                 + "SELECT " + resultColumnsString
                 + ";";
         System.out.println(full);
@@ -41,5 +38,13 @@ public class MyListener extends SQLParserBaseListener {
         }).collect(Collectors.toList());
 
         return colNames.stream().reduce((acc, next) -> acc + "," + next).get();
+    }
+
+    String getFromString(SQLParser.Select_coreContext selectCore) {
+        return "xxx"; //TODO
+    }
+
+    private String getWhereString(SQLParser.Select_coreContext selectCore) {
+        return "xxx"; //TODO
     }
 }
