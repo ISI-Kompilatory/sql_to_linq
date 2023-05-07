@@ -41,6 +41,7 @@ public class MyListener extends SQLParserBaseListener {
     }
 
     String getFromString(SQLParser.Select_coreContext selectCore) {
+
         return "xxx"; //TODO
     }
 
