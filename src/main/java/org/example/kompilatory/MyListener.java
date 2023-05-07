@@ -3,6 +3,8 @@ package org.example.kompilatory;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// NIE KORZYSTAMY Z TEGO, DO USUNIĘCIA!! Korzystamy z Visitora zamiast Listenera
+@Deprecated()
 public class MyListener extends SQLParserBaseListener {
 
     @Override
@@ -11,7 +13,7 @@ public class MyListener extends SQLParserBaseListener {
         selectList.forEach(selectStmt -> {
             selectStmt.select_core().forEach(this::processSelectCore);
         });
-        //System.out.println("Exit select statement: " + ctx.getText());
+// NIE KORZYSTAMY Z TEGO, DO USUNIĘCIA!! Korzystamy z Visitora zamiast Listenera
     }
 
     private void processSelectCore(SQLParser.Select_coreContext selectCore) {
@@ -28,6 +30,7 @@ public class MyListener extends SQLParserBaseListener {
                 + "SELECT " + resultColumnsString
                 + ";";
         System.out.println(full);
+        // NIE KORZYSTAMY Z TEGO, DO USUNIĘCIA!! Korzystamy z Visitora zamiast Listenera
     }
 
     String getResultColumnsString(SQLParser.Select_coreContext selectCore) {
@@ -36,13 +39,12 @@ public class MyListener extends SQLParserBaseListener {
             //return expr.column_name().any_name().getText();
             return expr.getText();
         }).collect(Collectors.toList());
-
+// NIE KORZYSTAMY Z TEGO, DO USUNIĘCIA!! Korzystamy z Visitora zamiast Listenera
         return colNames.stream().reduce((acc, next) -> acc + "," + next).get();
     }
 
     String getFromString(SQLParser.Select_coreContext selectCore) {
-
-        return "xxx"; //TODO
+        return "xxx";// NIE KORZYSTAMY Z TEGO, DO USUNIĘCIA!! Korzystamy z Visitora zamiast Listenera
     }
 
     private String getWhereString(SQLParser.Select_coreContext selectCore) {
@@ -54,6 +56,6 @@ public class MyListener extends SQLParserBaseListener {
             builder.append(whereExpr.getChild(i).getText() + " ");
         }
 
-        return builder.toString();
+        return builder.toString();// NIE KORZYSTAMY Z TEGO, DO USUNIĘCIA!! Korzystamy z Visitora zamiast Listenera
     }
 }
