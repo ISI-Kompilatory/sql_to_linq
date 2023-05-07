@@ -41,10 +41,19 @@ public class MyListener extends SQLParserBaseListener {
     }
 
     String getFromString(SQLParser.Select_coreContext selectCore) {
+
         return "xxx"; //TODO
     }
 
     private String getWhereString(SQLParser.Select_coreContext selectCore) {
-        return "xxx"; //TODO
+        SQLParser.ExprContext whereExpr = selectCore.whereExpr;
+        //System.out.println(whereExpr.getText());
+        StringBuilder builder = new StringBuilder();
+
+        for(int i = 0; i < whereExpr.getChildCount(); ++i) {
+            builder.append(whereExpr.getChild(i).getText() + " ");
+        }
+
+        return builder.toString();
     }
 }
