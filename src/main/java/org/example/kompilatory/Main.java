@@ -9,8 +9,8 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        String inputString = "SELECT column1, column2 FROM table1";
+    public static void main(String[] args) {
+        String inputString = "SELECT column1, column2, table1.col3 FROM table1";
         CharStream input = CharStreams.fromString(inputString);
         // stwórz obiekt SQLLexer
         SQLLexer lexer = new SQLLexer(input);

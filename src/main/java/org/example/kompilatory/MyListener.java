@@ -1,25 +1,45 @@
 package org.example.kompilatory;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class MyListener extends SQLParserBaseListener {
-    @Override
+
+
+/*    @Override
     public void enterSql_stmt_list(SQLParser.Sql_stmt_listContext ctx) {
         System.out.println("Enter select statement: " + ctx.getText());
-    }
+    }*/
 
     @Override
     public void exitSql_stmt_list(SQLParser.Sql_stmt_listContext ctx) {
-        System.out.println("Exit select statement: " + ctx.getText());
+        List<SQLParser.Select_stmtContext> selectList = ctx.select_stmt();
+        selectList.forEach(selectStmt -> {
+            selectStmt.select_core().forEach(this::processSelectCore);
+        });
+        //System.out.println("Exit select statement: " + ctx.getText());
     }
 
-    @Override
-    public void enterTable_name(SQLParser.Table_nameContext ctx) {
-        System.out.println("Enter table name: " + ctx.getText());
+
+    private void processSelectCore(SQLParser.Select_coreContext selectCore) {
+        String resultColumnsString = getResultColumnsString(selectCore);
+        System.out.println(resultColumnsString);
+
+        System.out.println("Całe zapytanie:");
+        String full = "FROM " + "xxx" + " "
+                + "WHERE " + "xxx" + " "
+                + "SELECT " + resultColumnsString
+                + ";";
+        System.out.println(full);
     }
 
-    @Override
-    public void exitTable_name(SQLParser.Table_nameContext ctx) {
-        System.out.println("Exit table name: " + ctx.getText());
-    }
+    String getResultColumnsString(SQLParser.Select_coreContext selectCore) {
+        List<String> colNames = selectCore.result_column().stream().map(res -> {
+            SQLParser.ExprContext expr = res.expr();
+            //return expr.column_name().any_name().getText();
+            return expr.getText();
+        }).collect(Collectors.toList());
 
-    // i tak dalej - dodaj metody enter i exit dla pozostałych produkcji gramatyki SQL
+        return colNames.stream().reduce((acc, next) -> acc + "," + next).get();
+    }
 }
