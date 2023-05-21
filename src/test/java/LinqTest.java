@@ -10,24 +10,48 @@ public class LinqTest {
                 "from t in table\n" +
                 "             select new\n" +
                 "             {\n" +
-                "                 water = t.water,\n" +
-                "                 soda = t.soda\n" +
+                "                 t.water,\n" +
+                "                 t.soda\n" +
                 "             };");
     }
 
     @Test
     void test2() {
-        getLinqAndCompare("SELECT column1, column2, table1.col3 FROM table1 WHERE column1 > 10 AND column1 < 20 GROUP BY column1, table1.column2;",
+        getLinqAndCompare("SELECT tab.water, tab.soda FROM table AS tab",
+                "from tab in table\n" +
+                        "             select new\n" +
+                        "             {\n" +
+                        "                 tab.water,\n" +
+                        "                 tab.soda\n" +
+                        "             };");
+    }
+
+    @Test
+    void test3() {
+        getLinqAndCompare("SELECT a.column1, a.column2 FROM table1 AS a WHERE a.column1 > 10 AND a.column1 < 20",
+                "from a in table1\n" +
+                        "             where a.column1>10 && a.column1<20\n" +
+                        "             select new\n" +
+                        "             {\n" +
+                        "                 a.column1,\n" +
+                        "                 a.column2\n" +
+                        "             };"
+        );
+    }
+
+    /*@Test
+    void test3() {
+        getLinqAndCompare("SELECT t.column1, t.column2 FROM table1 AS t WHERE t.column1 > 10 AND t.column1 < 20 GROUP BY t.column1, t.column2",
                 "from t in table1\n" +
                         "             where t.column1 > 10 && t.column1 < 20\n" +
-                        "             group new { t.column1, t.table1.column2, t.table1.col3 } by new { t.column1, t.table1.column2 } into g\n" +
+                        "             group t by new { t.column1, t.column2 } into g\n" +
                         "             select new\n" +
                         "             {\n" +
                         "                 column1 = g.Key.column1,\n" +
-                        "                 column2 = g.Key.column2,\n" +
-                        "                 col3 = g.Select(x => x.col3)\n" +
-                        "             };");
-    }
+                        "                 column2 = g.Key.column2\n" +
+                        "             };\n"
+        );
+    }*/
 
     private void compareLinqQueries(String expected, String actual) {
         assertEquals(

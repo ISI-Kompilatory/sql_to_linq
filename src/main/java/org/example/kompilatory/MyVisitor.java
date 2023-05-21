@@ -7,10 +7,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MyVisitor extends SQLParserBaseVisitor<String> {
-
+    String tableAlias;
     @Override
     public String visitSelect_core(SQLParser.Select_coreContext ctx) {
-        String tableAlias = "t"; //TODO
         String wherePart = "";
         if(ctx.whereExpr != null && ctx.WHERE_() != null) {
             wherePart = "WHERE " + visitWhereExpr(ctx.whereExpr) + " \n";
@@ -33,7 +32,7 @@ public class MyVisitor extends SQLParserBaseVisitor<String> {
         else
             throw new RuntimeException("Brakuje czegoś we FROM");
 
-        return "FROM " + tableAlias + " in " + fromOrJoinPart + " \n"
+        return "FROM " + fromOrJoinPart + " \n"
                 + wherePart
                 + groupByPart
                 + "SELECT new { \n" + getResultColumnsString(ctx) + " }\n"
@@ -95,32 +94,12 @@ public class MyVisitor extends SQLParserBaseVisitor<String> {
             // Obsługa przypadku tabeli
             String tableName = ctx.table_name().getText();
             String tableAlias = ctx.table_alias() != null ? ctx.table_alias().getText() : null;
+            this.tableAlias = tableAlias;
             //String schemaName = ctx.schema_name() != null ? ctx.schema_name().getText() + "." : "";
             //String asKeyword = ctx.AS_() != null ? " as " : " ";
 
-            return tableName + (tableAlias != null ? tableAlias : "");
-        } else if (ctx.table_function_name() != null) {
-            // Obsługa przypadku funkcji tabeli
-            String functionName = ctx.table_function_name().getText();
-            String tableAlias = ctx.table_alias() != null ? ctx.table_alias().getText() : null;
-            String asKeyword = ctx.AS_() != null ? " as " : " ";
-            String parameters = ctx.expr().stream()
-                    .map(this::visitExpr)
-                    .collect(Collectors.joining(", "));
-
-            return functionName + "(" + parameters + ")" + (tableAlias != null ? asKeyword + tableAlias : "");
-        } else if (ctx.select_stmt() != null) {
-            // Obsługa przypadku zagnieżdżonego zapytania SELECT
-            String subquery = visitSelect_stmt(ctx.select_stmt());
-            String tableAlias = ctx.table_alias() != null ? ctx.table_alias().getText() : null;
-            String asKeyword = ctx.AS_() != null ? " as " : " ";
-
-            return "(" + subquery + ")" + (tableAlias != null ? asKeyword + tableAlias : "");
-        } else {
-            // Obsługa przypadku klauzuli JOIN
-            String joinClause = visitJoin_clause(ctx.join_clause());
-
-            return "(" + joinClause + ")";
+            return (tableAlias != null ? tableAlias + " in " : "") + tableName;
         }
+        else return super.visitTable_or_subquery(ctx); // TODO
     }
 }
