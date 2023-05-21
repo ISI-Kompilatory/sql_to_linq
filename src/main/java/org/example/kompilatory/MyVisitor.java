@@ -101,5 +101,6 @@ public class MyVisitor extends SQLParserBaseVisitor<String> {
             return (tableAlias != null ? tableAlias + " in " : "") + tableName;
         }
         else return super.visitTable_or_subquery(ctx); // TODO
+
     }
 }
