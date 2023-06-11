@@ -1,0 +1,1 @@
+SELECT t.water, t.soda FROM table AS t

@@ -1,0 +1,1 @@
+SELECT tab.water, tab.soda FROM table AS tab;

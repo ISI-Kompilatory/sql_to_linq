@@ -4,22 +4,40 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Scanner;
+
 public class SQLToLinq {
     public static void main(String[] args) {
-        String inputString = "SELECT column1, column2, table1.col3 FROM table1 WHERE column1 > 10 AND column1 < 20 GROUP BY column1, table1.column2;";
-
-        System.out.println("Dla zapytania w SQL:");
-        System.out.println(inputString);
-        System.out.println("\n\n");
-        try {
-            String linq = sqlToLinq(inputString);
-            System.out.println("Zapytanie LINQ:");
-            System.out.println(linq);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Wystąpił błąd dla podanego zapytania");
+        System.out.println("Podaj ścieżkę do pliku z zapytaniem:");
+        String inputFile = new Scanner(System.in).nextLine(); // zapytania/z1.sql
+        File file = new File(inputFile);
+        System.out.println("Poszukiwanie dla pliku: " + file.getAbsolutePath());
+        if(file.exists()) {
+            try {
+                String content = new String(Files.readAllBytes(Paths.get(inputFile)));
+                System.out.println("Dla zapytania w SQL:");
+                System.out.println(content);
+                System.out.println("\n");
+                try {
+                    String linq = sqlToLinq(content);
+                    System.out.println("Zapytanie LINQ:");
+                    System.out.println(linq);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("Wystąpił błąd dla podanego zapytania");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Wystąpił problem z otwarciem pliku");
+            }
         }
-
+        else {
+            System.out.println("Plik nie istnieje");
+        }
     }
 
     public static String sqlToLinq(String sql) {
