@@ -11,9 +11,15 @@ public class SQLToLinq {
         System.out.println("Dla zapytania w SQL:");
         System.out.println(inputString);
         System.out.println("\n\n");
-        String linq = sqlToLinq(inputString);
-        System.out.println("Zapytanie LINQ:");
-        System.out.println(linq);
+        try {
+            String linq = sqlToLinq(inputString);
+            System.out.println("Zapytanie LINQ:");
+            System.out.println(linq);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Wystąpił błąd dla podanego zapytania");
+        }
+
     }
 
     public static String sqlToLinq(String sql) {
