@@ -1,0 +1,1 @@
+SELECT a.column1, a.column2 FROM table1 AS a WHERE a.column1 > 10 AND a.column1 < 20;
